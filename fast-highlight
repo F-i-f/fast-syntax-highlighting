@@ -627,7 +627,7 @@ typeset -ga ZLAST_COMMANDS
                         elif [[ $__arg == "for" ]]; then
                           (( next_word = next_word | 32 )) # BIT_for
                         elif [[ $__arg == "case" ]]; then
-                          (( next_word = BIT_case_preamble ))
+                          (( next_word = 2|BIT_case_preamble ))
                         elif [[ $__arg = (typeset|declare|local|float|integer|export|readonly) ]]; then
                           braces_stack='T'$braces_stack
                         fi
@@ -1048,6 +1048,7 @@ typeset -ga ZLAST_COMMANDS
                  fi
                  ;;
       esac
+      (( this_word & BIT_case_preamble )) && (( next_word = BIT_case_preamble ))
     elif (( this_word & 128 ))
     then
       (( next_word = (next_word | 2) & ~129 ))
@@ -1061,7 +1062,7 @@ typeset -ga ZLAST_COMMANDS
           __style=${FAST_THEME_NAME}reserved-word
           (( next_word = BIT_case_item ))
         } || {
-          __style=${FAST_THEME_NAME}case-input
+          #__style=${FAST_THEME_NAME}case-input
           (( next_word = BIT_case_preamble ))
         }
       else
